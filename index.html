@@ -23,6 +23,38 @@
     var rightPressed = false;                           //오른쪽 방향키 누름 여부
     var leftPressed = false;                            //왼쪽 방향키 누름 여부
 
+	var brickRowCount = 3;
+	var brickColumnCount = 5;
+	var brickWidth = 75;
+	var brickHeight = 20;
+	var brickPadding = 10;
+	var brickOffsetTop = 30;
+	var brickOffsetLeft = 30;
+
+
+	var bricks = []; //벽돌들의 변수
+	for(var c=0; c<brickColumnCount; c++) {
+		bricks[c] = [];
+		for(var r=0; r<brickRowCount; r++) {
+			bricks[c][r] = { x: 0, y: 0 };					//벽돌 배열 변수에 x, y 위치값 변수 추가
+		}
+}
+	function drawBricks() {	//벽돌 그리기
+		for(var c=0; c<brickColumnCount; c++) {
+			for(var r=0; r<brickRowCount; r++) {
+				var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;		//벽돌의 x위치값 계산
+				var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;	//벽돌의 y위치값 계산
+				bricks[c][r].x = brickX;		
+				bricks[c][r].y = brickY;
+				ctx.beginPath();
+				ctx.rect(bricks[c][r].x, bricks[c][r].y, brickWidth, brickHeight);
+				ctx.fillStyle = "#0095DD";
+				ctx.fill();
+				ctx.closePath();
+			}
+		}
+	}
+
     document.addEventListener("keydown", keyDownHandler, false);    //키를 누를 때 (조건,실행함수)
     document.addEventListener("keyup", keyUpHandler, false);        //키를 뗄 때
 
@@ -43,14 +75,14 @@
         }
     }
 
-    function drawBall() {
+    function drawBall() { //x, y 위치에 공 그리기
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
         ctx.fillStyle = "#0095DD";
         ctx.fill();
         ctx.closePath();
     }
-    function drawPaddle() {
+    function drawPaddle() {//x, y 위치에 패들 그리기
         ctx.beginPath();
         ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
         ctx.fillStyle = "#0095DD";
@@ -60,6 +92,7 @@
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+		drawBricks();
         drawBall();
         drawPaddle();
 
@@ -96,4 +129,6 @@
 
 </body>
 </html>
+
+
 
