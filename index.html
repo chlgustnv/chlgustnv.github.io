@@ -36,24 +36,28 @@
 	for(var c=0; c<brickColumnCount; c++) {
 		bricks[c] = [];
 		for(var r=0; r<brickRowCount; r++) {
-			bricks[c][r] = { x: 0, y: 0 };					//벽돌 배열 변수에 x, y 위치값 변수 추가
+			bricks[c][r] = { x: 0, y: 0, status: 1 };					//벽돌 배열 변수에 x, y 위치값 변수 추가 status는 벽돌의 상태(공에 벽돌이 부딪힌 적 있는지)
 		}
 }
 	function drawBricks() {	//벽돌 그리기
 		for(var c=0; c<brickColumnCount; c++) {
 			for(var r=0; r<brickRowCount; r++) {
-				var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;		//벽돌의 x위치값 계산
-				var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;	//벽돌의 y위치값 계산
-				bricks[c][r].x = brickX;		
-				bricks[c][r].y = brickY;
-				ctx.beginPath();
-				ctx.rect(bricks[c][r].x, bricks[c][r].y, brickWidth, brickHeight);
-				ctx.fillStyle = "#0095DD";
-				ctx.fill();
-				ctx.closePath();
+				if(bricks[c][r].status == 1){
+					var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;		//벽돌의 x위치값 계산
+					var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;	//벽돌의 y위치값 계산
+					bricks[c][r].x = brickX;		
+					bricks[c][r].y = brickY;
+					ctx.beginPath();
+					ctx.rect(bricks[c][r].x, bricks[c][r].y, brickWidth, brickHeight);
+					ctx.fillStyle = "#0095DD";
+					ctx.fill();
+					ctx.closePath();
+				}
 			}
 		}
 	}
+
+
 
     document.addEventListener("keydown", keyDownHandler, false);    //키를 누를 때 (조건,실행함수)
     document.addEventListener("keyup", keyUpHandler, false);        //키를 뗄 때
@@ -75,6 +79,20 @@
         }
     }
 
+	function collisionDetection() {		//벽돌 충돌 감지
+		for(var c=0; c<brickColumnCount; c++) {
+			for(var r=0; r<brickRowCount; r++) {
+				var b = bricks[c][r];
+				if(b.status == 1){						//벽돌의 상태가 부딪히지 않은 상태일 경우에만 튕겨냄
+					if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {		//공의 x위치가 벽돌의 x값보다 크고 x+벽돌가로폭 보다 작으며		
+						dy = -dy;																											//공의 y위치가 벽돌의 y값보다 크고 y+벽돌세로폭 보다 작음 -> 벽돌 네모 안 좌표 
+						b.status = 0;
+					}
+				}
+			}
+		}
+	}
+
     function drawBall() { //x, y 위치에 공 그리기
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -90,11 +108,12 @@
         ctx.closePath();
     }
 
-    function draw() {
+    function draw() {										//캔버스에 그리는 함수 (유니티의 update 함수와 비슷한 역할)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawBricks();
         drawBall();
         drawPaddle();
+		collisionDetection();
 
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) { //공이 양옆 벽에 닿으면 이동방향을 반대로 바꿈
             dx = -dx;
@@ -129,6 +148,3 @@
 
 </body>
 </html>
-
-
-
