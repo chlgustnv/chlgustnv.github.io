@@ -63,12 +63,22 @@
         drawBall();
         drawPaddle();
 
-        if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) { //공이 양옆 벽에 닿으면 이동방향을 반대로 바꿈
             dx = -dx;
         }
-        if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+        if(y + dy < ballRadius) {			//굥이 천장에 닿으면 방향을 바꿈
             dy = -dy;
         }
+		else if(y + dy > canvas.height-ballRadius){			//공이 바닥에 닿을 때
+			if(x > paddleX && x < paddleX + paddleWidth) {		//공이 패드 사이에 있으면 튕겨냄
+				dy = -dy;
+			}
+			else{
+				alert("Game Over");
+				document.location.reload();
+				clearInterval(interval);
+			}
+		}
 
         if(rightPressed && paddleX < canvas.width-paddleWidth) {
             paddleX += 7;
@@ -81,7 +91,7 @@
         y += dy;
     }
 
-    setInterval(draw, 10);
+    var interval = setInterval(draw, 10);
 </script>
 
 </body>
