@@ -10,23 +10,23 @@
 <canvas id="myCanvas" width="480" height="320"></canvas>
 
 <script>
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    var ballRadius = 10;
-    var x = canvas.width/2;
-    var y = canvas.height-30;
-    var dx = 2;
+    var canvas = document.getElementById("myCanvas");    //캔버스 변수
+    var ctx = canvas.getContext("2d");                  //2d 캔버스를 ctx변수에 저장
+    var ballRadius = 10;                                //공의 반지름
+    var x = canvas.width/2;                             //공의 위치 x
+    var y = canvas.height-30;                           //공의 위치 y
+    var dx = 2;                                         //공의 스피드
     var dy = -2;
-    var paddleHeight = 10;
-    var paddleWidth = 75;
-    var paddleX = (canvas.width-paddleWidth)/2;
-    var rightPressed = false;
-    var leftPressed = false;
+    var paddleHeight = 10;                              //패드 세로길이
+    var paddleWidth = 75;                               //패드 가로길이
+    var paddleX = (canvas.width-paddleWidth)/2;         //패드 위치
+    var rightPressed = false;                           //오른쪽 방향키 누름 여부
+    var leftPressed = false;                            //왼쪽 방향키 누름 여부
 
-    document.addEventListener("keydown", keyDownHandler, false);
-    document.addEventListener("keyup", keyUpHandler, false);
+    document.addEventListener("keydown", keyDownHandler, false);    //키를 누를 때 (조건,실행함수)
+    document.addEventListener("keyup", keyUpHandler, false);        //키를 뗄 때
 
-    function keyDownHandler(e) {
+    function keyDownHandler(e) {                    
         if(e.code  == "ArrowRight") {
             rightPressed = true;
         }
