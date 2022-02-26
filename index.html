@@ -22,6 +22,7 @@
     var paddleX = (canvas.width-paddleWidth)/2;         //패드 위치
     var rightPressed = false;                           //오른쪽 방향키 누름 여부
     var leftPressed = false;                            //왼쪽 방향키 누름 여부
+	var score = 0;												//점수
 
 	var brickRowCount = 3;
 	var brickColumnCount = 5;
@@ -86,12 +87,24 @@
 				if(b.status == 1){						//벽돌의 상태가 부딪히지 않은 상태일 경우에만 튕겨냄
 					if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {		//공의 x위치가 벽돌의 x값보다 크고 x+벽돌가로폭 보다 작으며		
 						dy = -dy;																											//공의 y위치가 벽돌의 y값보다 크고 y+벽돌세로폭 보다 작음 -> 벽돌 네모 안 좌표 
-						b.status = 0;
+						b.status = 0;		//벽돌 상태 부딪힌 상태로 변환
+						score++;				//점수 추가
+						if(score == brickRowCount*brickColumnCount) { //처음 생성되는 모든 벽돌의 개수와 점수가 같을 경우
+							alert("YOU WIN, CONGRATULATIONS!");
+							document.location.reload();//재시작
+							clearInterval(interval);		//게임 종료에 필요 interval을 멈춤
+						}
 					}
 				}
 			}
 		}
 	}
+
+	function drawScore() {				//점수 표시
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+score, 8, 20);
+}
 
     function drawBall() { //x, y 위치에 공 그리기
         ctx.beginPath();
@@ -107,13 +120,15 @@
         ctx.fill();
         ctx.closePath();
     }
-
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
     function draw() {										//캔버스에 그리는 함수 (유니티의 update 함수와 비슷한 역할)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawBricks();
         drawBall();
         drawPaddle();
+		drawScore();
 		collisionDetection();
+
 
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) { //공이 양옆 벽에 닿으면 이동방향을 반대로 바꿈
             dx = -dx;
@@ -142,7 +157,7 @@
         x += dx;
         y += dy;
     }
-
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     var interval = setInterval(draw, 10);
 </script>
 
