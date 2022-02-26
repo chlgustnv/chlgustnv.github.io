@@ -62,8 +62,16 @@
 
     document.addEventListener("keydown", keyDownHandler, false);    //키를 누를 때 (조건,실행함수)
     document.addEventListener("keyup", keyUpHandler, false);        //키를 뗄 때
+	document.addEventListener("mousemove", mouseMoveHandler, false);	//마우스 감지
 
-    function keyDownHandler(e) {                    
+	function mouseMoveHandler(e) {
+		var relativeX = e.clientX - canvas.offsetLeft; //offsetLeft는 캔버스 왼쪽 밖의 뷰포트 길이값
+		if(relativeX > 0 && relativeX < canvas.width) {
+			paddleX = relativeX - paddleWidth/2;
+		}
+	}
+
+    function keyDownHandler(e) {                    //키가 눌렷을 때 방향키가 눌렷는지 확인
         if(e.code  == "ArrowRight") {
             rightPressed = true;
         }
@@ -71,7 +79,7 @@
             leftPressed = true;
         }
     }
-    function keyUpHandler(e) {
+    function keyUpHandler(e) {						 //키가 떼졌을 때 방향키가 떼졋는지 확인
         if(e.code  == "ArrowRight") {
             rightPressed = false;
         }
@@ -163,3 +171,5 @@
 
 </body>
 </html>
+
+
