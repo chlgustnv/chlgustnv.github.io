@@ -23,6 +23,7 @@
     var rightPressed = false;                           //오른쪽 방향키 누름 여부
     var leftPressed = false;                            //왼쪽 방향키 누름 여부
 	var score = 0;												//점수
+	var lives = 3;												//생명
 
 	var brickRowCount = 3;
 	var brickColumnCount = 5;
@@ -112,7 +113,13 @@
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Score: "+score, 8, 20);
-}
+	}
+
+	function drawLives() {				//목숨 표시
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+	}
 
     function drawBall() { //x, y 위치에 공 그리기
         ctx.beginPath();
@@ -135,6 +142,7 @@
         drawBall();
         drawPaddle();
 		drawScore();
+		drawLives();
 		collisionDetection();
 
 
@@ -149,9 +157,18 @@
 				dy = -dy;
 			}
 			else{
-				alert("Game Over");
-				document.location.reload();
-				clearInterval(interval);
+				lives--;
+				if(!lives) {											//라이프가 0일경우
+					alert("GAME OVER");
+					document.location.reload();
+				}
+				else {
+					x = canvas.width/2;
+					y = canvas.height-30;
+					dx = 2;
+					dy = -2;
+					paddleX = (canvas.width-paddleWidth)/2;
+				}
 			}
 		}
 
@@ -164,12 +181,11 @@
 
         x += dx;
         y += dy;
+		 requestAnimationFrame(draw); //계속해서 스스로를 호출
     }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    var interval = setInterval(draw, 10);
+draw();
 </script>
 
 </body>
 </html>
-
-
